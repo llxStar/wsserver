@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<!--<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">-->
+	<meta name="msapplication-tap-highlight" content="no">
+	<title></title>
+	<link rel="icon" href="/metee.ico" type="image/x-icon">
+	<link rel="SHORTCUT ICON" href="/metee.ico" type="image/x-icon">
+	<link type="text/css" rel="stylesheet" href="">
+</head>
+<body onclick="sendMessage()">
+<input id="text" type="text" value="123">
+加载成功
+</body>
+<script type="text/javascript">
+	const ws = new WebSocket('ws://localhost:9999');
+	ws.onopen = () => console.log('open');
+    ws.onmessage = (e) => console.log('Client received a message', e);
+    ws.onclose = () => console.log('connection closed.');
+    function sendMessage() {
+      const v = document.getElementById('text').value;
+      ws.send(v);
+      console.log(v);
+    }
+</script>
+</html>
