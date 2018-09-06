@@ -1,11 +1,32 @@
 const http = require('http');
-const websocket = require('ws').Server;
+const WebSocket = require('ws');
+const wsserver = require('ws').Server;
 
 const server = http.createServer((req, res) => {
-  res.end("This is a  WebSockets server!");
+  if (req.url.indexOf('ajax') > -1) { // ajax请求
+    res.writeHead(200, 'request ok',{
+      'Access-Control-Allow-Origin': '*',
+      'Content-Type': 'text/javascript;charset=UTF-8',
+    });
+    res.end(JSON.stringify({
+      data: {
+        ctime: new Date().getTime(),
+      },
+      msg: '请求成功！',
+      errno: 0,
+    }));
+    ws.clients.forEach( client => {
+      if (client.readyState === WebSocket.OPEN) {
+        client.send('广播：接收到ajax请求！');
+      }
+    });
+  } else {
+    res.end(req.url);
+  }
+
 }).listen(23333);
 
-const ws = new websocket({
+const ws = new wsserver({
   server,
   port: 9999,
   perMessageDeflate: {
@@ -30,10 +51,11 @@ const ws = new websocket({
 });
 ws.on('connection', function (w) {
   w.on('message', function (data) {
-    // Broadcast
+    // Broadcast to everybody exclude slef
     ws.clients.forEach(function each(client) {
-      client.send(JSON.stringify({a:1}));
-      console.log('send data');
+      if (client !== w && client.readyState === WebSocket.OPEN) {
+        client.send(JSON.stringify(data));
+      }
     });
   });
 });

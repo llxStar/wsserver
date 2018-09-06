@@ -5,24 +5,34 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	<!--<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">-->
 	<meta name="msapplication-tap-highlight" content="no">
-	<title></title>
-	<link rel="icon" href="/metee.ico" type="image/x-icon">
-	<link rel="SHORTCUT ICON" href="/metee.ico" type="image/x-icon">
+	<title>websocket</title>
 	<link type="text/css" rel="stylesheet" href="">
 </head>
-<body onclick="sendMessage()">
-<input id="text" type="text" value="123">
-加载成功
+<body>
+	加载成功
+	<br>
+	<input id="text" type="text" value="123">
+	<input type="button" value="发送ws信息" onclick="sendWs()">
+	<br>
+	<input type="button" value="发送ajax请求" onclick="sendAjax()">
 </body>
+<script type="text/javascript" src="https://cdn.bootcss.com/jquery/1.12.3/jquery.min.js"></script>
 <script type="text/javascript">
-	const ws = new WebSocket('ws://localhost:9999');
-	ws.onopen = () => console.log('open');
-    ws.onmessage = (e) => console.log('Client received a message', e);
-    ws.onclose = () => console.log('connection closed.');
-    function sendMessage() {
-      const v = document.getElementById('text').value;
-      ws.send(v);
-      console.log(v);
-    }
+  const ws = new WebSocket('ws://localhost:9999');
+  ws.onopen = () => console.log('open');
+  ws.onmessage = (e) => console.log('Client received a message', e);
+  ws.onclose = () => console.log('connection closed.');
+
+  function sendWs() {
+    const v = document.getElementById('text').value;
+    ws.send(v);
+    console.log(v);
+  }
+  
+  function sendAjax() {
+	 $.post('http://192.168.1.49:23333/ajax', {}, (res) => {
+	   console.log(res);
+	 })
+  }
 </script>
 </html>
