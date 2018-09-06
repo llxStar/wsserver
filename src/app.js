@@ -1,7 +1,12 @@
-/**
- * Created by llx on 2018/9/5.
- */
-const ws = new (require('ws')).Server({
+const http = require('http');
+const websocket = require('ws').Server;
+
+const server = http.createServer((req, res) => {
+  res.end("This is a  WebSockets server!");
+}).listen(23333);
+
+const ws = new websocket({
+  server,
   port: 9999,
   perMessageDeflate: {
     zlibDeflateOptions: { // See zlib defaults.
@@ -23,7 +28,6 @@ const ws = new (require('ws')).Server({
                                    // should not be compressed.
   }
 });
-
 ws.on('connection', function (w) {
   w.on('message', function (data) {
     // Broadcast
