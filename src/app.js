@@ -24,19 +24,9 @@ const ws = new (require('ws')).Server({
   }
 });
 
-ws.on('open', function open() {
-  ws.send('something');
-  console.log('open');
-});
-
-ws.on('message', function incoming(data) {
-  console.log(data);
-});
-console.log('code end');
-
-ws.on('connection', function connection(w) {
-  w.on('message', function incoming(data) {
-    // Broadcast to everyone else.
+ws.on('connection', function (w) {
+  w.on('message', function (data) {
+    // Broadcast
     ws.clients.forEach(function each(client) {
       client.send(JSON.stringify({a:1}));
       console.log('send data');
