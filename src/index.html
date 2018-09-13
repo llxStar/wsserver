@@ -14,7 +14,8 @@
 	<input id="text" type="text" value="123">
 	<input type="button" value="发送ws信息" onclick="sendWs()">
 	<br>
-	<input type="button" value="发送ajax请求" onclick="sendAjax()">
+	<input type="button" value="发送ajax GET请求" onclick="sendAjaxGet()">
+	<input type="button" value="发送ajax POST请求" onclick="sendAjaxPost()">
 </body>
 <script type="text/javascript" src="https://cdn.bootcss.com/jquery/1.12.3/jquery.min.js"></script>
 <script type="text/javascript">
@@ -29,10 +30,19 @@
     console.log(v);
   }
   
-  function sendAjax() {
-	 $.post('http://192.168.1.49:23333/ajax', {}, (res) => {
-	   console.log(res);
-	 })
+  function sendAjaxGet() {
+	 $.get('http://192.168.3.124:23333/get', {}, function(res) {
+	   console.log(res, 1111);
+	 }, 'json');
+  }
+  
+  function sendAjaxPost() {
+    $.post('http://192.168.3.124:23333/post', {
+      seq: Math.floor(Math.random() * 10),
+      name: `xiaobai${new Date().getTime()}`,
+    }, (res) => {
+      console.log(res);
+    }, 'json');
   }
 </script>
 </html>

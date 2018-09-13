@@ -5,6 +5,7 @@
     "start": "node app"
   },
   "dependencies": {
+    "mongoose": "^5.2.14",
     "ws": "^6.0.0"
   }
 }
