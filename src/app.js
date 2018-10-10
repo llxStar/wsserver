@@ -2,21 +2,17 @@ const http = require('http');
 const WebSocket = require('ws');
 const wsserver = require('ws').Server;
 const querystring = require('querystring');
-const mongoose = require('mongoose');
 
-mongoose.connect('mongodb://localhost/test');
-const db = mongoose.connection;
-const schema = new mongoose.Schema({
-  info: Object,
-  ctime: Date,
-});
-const infoModel = mongoose.model('info', schema, 'info');
-db.once('open', () => {
+const dbserver = require('./dbserver')
+const infoModel = require('./dbserver/model/info');
+
+dbserver.db.once('open', () => {
   console.log('mongodb connect success');
 });
-db.on('error', (err) => {
+dbserver.db.on('error', (err) => {
   console.log(`mongodb connect fail:${err}`)
 });
+
 
 const server = http.createServer((req, res) => {
   res.writeHead(200, 'request ok',{
@@ -47,9 +43,11 @@ const server = http.createServer((req, res) => {
       data = data.toString();
       const info = querystring.parse(data);
       console.log(data);
+      console.log(info);
       let d = new infoModel({
-        info,
-        ctime: new Date(),
+        uid: info.uid,
+        token: info.token,
+        data: JSON.parse(info.data),
       });
       d.save((err, d) => {
         if (err) throw err;
