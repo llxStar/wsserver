@@ -11,7 +11,7 @@ module.exports = new mongoose.Schema({
   },
   data: {
     type: Object,
-    default: '',
+    default: {},
   },
   ctime: { // 生成时间
     type: Date,
